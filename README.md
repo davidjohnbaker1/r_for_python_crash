@@ -57,3 +57,12 @@ Many materials are drawn from previous workshop materials that can be found [her
 	- Bookdown 
 	- Blogdown 
 
+## Resources
+
+* [R for Data Science]()
+* [Practical Programming with R]()
+* [Tidy Text with R]()
+* [Deep Learning with R]()
+* [Advanced R]()
+* [data.table]() | For Datasets 10-100 Gigs 
+* [] 
