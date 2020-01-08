@@ -1,0 +1,405 @@
+---
+title: "Using R"
+author: "David John Baker"
+date: "12/23/2018"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## Lesson Goals
+
+* Run Basic Commands in R
+* Understand Basic Data Structures
+* Run commands over vectors
+* Index data frames
+* Learn basic data structures
+* Understand base R vs Tidyverse
+* Import and export data to/from R
+
+## RStudio Shortcuts and Markdown
+
+In this session I will be using a lot of Keyboard Shortcuts when typing myself.
+In the past, people have always asked about these, so I'm anticipating that question with a link [here](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts) to that page.
+
+## R as Calculator
+
+The Console of R is where all the action happens. 
+You can use it just like you would use a calculator. 
+Try to do some basic math operations in it.
+
+```{r}
+2 + 2
+5 - 2
+10 / 4
+9 * 200
+sqrt(81)
+10 > 4
+2 < -1
+```
+
+Now from the output above, you'll notice that there are a few different types of responses that R will give.
+For the math responses, we get numbers, but we can also get TRUE and FALSE statements.
+
+When working with data, we need to be aware not only of what the data represents, but what R thinks it represents.
+We won't go over the differences between things like ordinal, ratio, and categorical data, I'll assume you have a basic understanding of this.
+What we will focus on is the different data types that R thinks in.
+
+For now, we are going to talk about R's basic data structures.
+
+* Logical
+* Integer
+* Double (numeric)
+* Character 
+* Factor 
+
+The first is logical. 
+Logical is basically just TRUE or FALSE.
+We can try a few different expressions that show how this works.
+
+```{r}
+2 > 4
+
+1 > 0
+
+4 >= 7
+
+5 != 5
+```
+Eventually you will learn to take advantage of the complexities of this when we get to subsetting and combining them with other logical operators like ```&```(and) and ```|``` (OR).
+
+Next we have integers and double.
+Both integers and double are R's numeric forms of data.
+The ```is.numeric()``` command checks for if data is number-y.
+
+```{r}
+is.integer(7L)
+is.double(7)
+is.numeric(7)
+```
+
+Next we have characters.
+Characters are not *just* letters, but rather data that is text.
+Character data is always wrapped in quotes ```" "```
+
+```{r}
+is.character("hello, world!")
+
+is.character("7")
+
+is.character("I will drink 7 coffees by the end of today!")
+
+is.character("NA")
+```
+Note that if a special character like ```NA``` is in quotes, R will still think it is a character.
+To change this, we need to coerce our data into a different type.
+We will cross that bridge later.
+For now, you just need to be aware of the different character types.
+
+Lastly, there are factors which sometimes LOOK like characters, but are R's way of thinking about categorical data.
+We need to assign this to R.
+When you first import in data into R, it will sometimes guess it as being a factor which is very annoying! 
+If R is being slow, or not responding to something you want it to do, a common rookie mistake is to have your data accidentally be a factor.
+
+```{r}
+
+is.factor("doggo")
+
+doggo <- as.factor("doggo")
+
+is.factor(doggo)
+
+is.character(doggo)
+
+is.numeric(doggo)
+
+```
+
+Now that we're at least aware of the different types of data in R, we can move on to building up an intuitive understanding of how R thinks about data under the hood. 
+
+## Being Lazy 
+
+You don't always want to print your output and retype it in. 
+The idea of being a good programmer is to be very lazy (efficient).
+
+One of the best ways to be efficient when programming is to save variables to objects.
+Below is some example code that uses the ```<-``` operator to assign some math to an object.
+After you assign it to an object, you can then manipulate it like you would any other number.
+Yes, you can use ``=`` as an assignment operator (for all you Pythonistas), but in R this is considered bad practice as R is primarily a statistical programming language and the ``=`` sign means something very different in a math context.
+
+```{r}
+foo <- 2 * 3
+foo * 6
+```
+
+After running these two lines of code, notice what has popped up in your environment in RStudio!
+You should see that you now have any object in the Environment called `foo`.
+
+In addition to saving single values to objects, you can also store a collection of values.
+Below we use an example that might have a bit more meaning, the below stores what could be some data into an object that represents what it might be.
+
+```{r}
+yearsSellingWidgets <- c(2,1,4,5,6,7,3,2,4,5,3)
+```
+
+The way that the line above works is that we use the ```c()``` function (c for combine) to group together a bunch of the same type of data (numbers) into a vector.
+Once we have everything combined and stored into an object, we can then manipulate all the numbers in the object just like we did above with a single number.
+A single dimensional object is called a **vector**.
+For example, we could multiply all the numbers by three. 
+
+```{r}
+yearsSellingWidgets * 3
+```
+
+Or maybe we realized that our inputs were wrong and we need to shave off two years off of each of the entries.
+
+```{r}
+yearsSellingWidgets - 2
+```
+
+Or perhaps we want to find out which of our pieces of data (and other data associated with that observation) are less than 2.
+
+```{r}
+yearsSellingWidgets < 2
+```
+
+Any sort of mathematical operation can be performed on a vector!
+In addition to treating it like a mathematical operation, we can also run functions on objects.
+By looking at the name of each function and it's output, take a guess at what each of the below functions does.
+
+```{r}
+mean(yearsSellingWidgets)
+sd(yearsSellingWidgets)
+hist(yearsSellingWidgets)
+scale(yearsSellingWidgets)
+range(yearsSellingWidgets)
+min(yearsSellingWidgets)
+class(yearsSellingWidgets)
+str(yearsSellingWidgets)
+summary(yearsSellingWidgets)
+```
+
+Often working with data, we don't want to just play with one group of numbers.
+Most of the time we are trying to compare different observations in data science.
+If we then create two vectors (one of which we have already made!) and then combine them together into a data frame, we have something sort of looking like a spreadsheet.
+A two-dimensional object is called a **data frame**.
+
+
+```{r}
+yearsSellingWidgets <- c(2,1,4,5,6,7,3,2,4,5,3)
+numberOfSales <- c(5,2,5,7,9,9,2,8,4,7,2)
+salesData <- data.frame(yearsSellingWidgets,numberOfSales)
+salesData
+```
+
+Now if we wanted to use something like R's correlation function we could just pass in the two objects that we have like this and get a correlation value. 
+
+```{r}
+cor(yearsSellingWidgets,numberOfSales)
+```
+But often our data will be saved in data frames and we need to be able to access one of our vectors inside our data frame. 
+To access a piece of information in a data frame we use the ```$``` operator.
+
+```{r}
+salesData$yearsSellingWidgets
+```
+
+Running the above code will print out the vector called ```yearsSellingWidgets``` from the data frame ```salesData```.
+Using this form, we can then use this with the correlation function.
+
+```{r}
+cor(salesData$yearsSellingWidgets,salesData$numberOfSales)
+```
+
+In addition to just getting numeric output, we also want to be able to look at our data.
+Take a look at the code below and try to figure out what the function call is, as well as what each argument (or thing you pass to a function) does. 
+
+```{r}
+plot(yearsSellingWidgets,numberOfSales, 
+     data = salesData, 
+     main = "My Plot", 
+     xlab = "Years at Company", 
+     ylab = "Number of Sales")
+```
+
+If you are having a hard time understanding arguments, one thing that might help to think about is that each argument is like a click in a software program like SPSS or Excel.
+Imagine you want to make the same plot with this data in SSPSS, what would you do?
+The first thing you would do is to go to the top of the bar and find the ```Plot``` function and click it.
+This is the same as typing out ```plot()``` in R.
+Then you would have to tell that new pop up screen what two variables you want to plot and click on the related variables.
+Dragging and dropping those variables into your plot builder is the same as just typing out the variables you want.
+Lastly you want to put names on your axes and a title on your plot.
+The same logic would follow. 
+We'll explore these ideas a bit more in the next section
+
+## Packages and Help
+
+One of the beautiful aspects of programming in R is that there is wealth of other software that other people have created and shared for free that you can use.
+In order to use this other software beyond Base R, you need to install packages then call them using the ```library()``` function.
+
+Probably the most useful package in R is the ```tidyverse``` which is actually a suite of packages all built around the same philosophy.
+We will talk more about that philosophy later, but for now, let's install the tidyverse.
+
+To do this, uncomment (delete the hash) of the first line of R chunk below.
+Run that line.
+You can also do this by just typing that line into the R console.
+When you do this, R will connect to the internet, download the necessary software and add it to your library.
+Now even though the package is installed, it is not ready to use just yet.
+In order to do this, you need to use the ```library()``` function and pass it the name of the library you want to use.
+Every time you run an R script or have R running, you need to tell R that you want this suite of tools.
+Best practice is putting all of the R scripts you need at the top of your R file so they are there when you need them.
+**You do NOT need to install the package every time you open or run R**.
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+With the tidyverse loaded, you will also get a series of datasets that are used to help with the examples.
+Run the following commands below to see what datasets are currently available to you.
+
+```{r, eval=FALSE}
+data()
+```
+
+We will be using the ```txhousing``` dataset for the rest of these examples.
+
+### Getting Help in R
+
+You should know that programming is basically getting very good at Googling your problems.
+Do yourself a favor and disavow yourself of the notion that you need to "know" all the functions in order to be a good programmer.
+Everyone who learns R has gone though a similar process of getting stuck on stupid problems.
+Not related to the technical aspects of R, but there are no dumb questions when it comes to learning.
+Anyone that scoffs at a problem for being too simple or tells you something like "You should have just read the documentation" is just gate-keeping and you shouldn't ask them for help.
+
+That said, there are a lot of great ways to get help when you run into problems with R.
+
+1. Your peers
+2. The internet /[Stack Overflow](www.StackOverflow.com)
+3. R's built in help functions
+
+There is a bit of basic etiquette when asking for programming help.
+The first is that you provide enough detail to reproduce your problem and errors.
+The second is that you do not ask questions in a way that seems like you are just getting other people to do your work for you.
+Check out [this post](https://stackoverflow.com/help/how-to-ask) for more information on asking questions online. 
+
+One of best things to do is just open an R help page and play around with things (and break things) until you "get" how it works.
+
+To access R's in built help function you can easier use the Help viewer in R studio or type in a question mark before the command in the console.
+Using two ``??`` will search more generally
+
+```{r, eval=FALSE}
+?scale()
+??scale()
+```
+
+## Data Exploration
+
+```{r}
+str(txhousing)
+class(txhousing)
+summary(txhousing)
+```
+
+Accessing individual 'columns' is done with the ```$``` operator
+
+```{r, eval=FALSE}
+txhousing$sales
+```
+
+Can you use this to plot the different numeric values against each other?
+
+What would the follow commands do?
+
+```{r}
+hist(scale(iris$Sepal.Length))
+iris$Sepal.Length.scale <- scale(iris$Sepal.Length)
+```
+
+## Indexing
+
+Let's combine logical indexing with creating new objects.
+
+What do the follow commands do? Why?
+
+```{r}
+txhousing[1,1]
+txhousing[2,]
+txhousing[,5]
+txhousing[txhousing$year < 2003,]
+txhousing[,c(1:4)]
+txhousing[txhousing$city=="San Antonio",c(1:6,8)]
+AbilineData <- txhousing[txhousing$city == "Abilene",]
+```
+This could be an entire lecture by itself!!!
+It is important to know how R's indexing works, but in the year 2019 there is no need to be using base R command to index.
+We will talk more about the tidyverse tomorrow, but the following code does the exact same indexing as the base R code above, but is much more human readable. 
+
+## Tidyverse
+
+```{r}
+txhousing %>%
+  select(year)
+
+txhousing %>%
+  filter(year < 2003)
+
+txhousing %>%
+  select(city:volume)
+
+txhousing %>%
+  select(1:6, inventory) %>%
+  filter(city == "San Antonio")
+
+AbilineData <- txhousing %>%
+  filter(city == "Abiline")
+
+```
+
+As your code gets longer, the tidyverse becomes more readable.
+It is also more helpful for exploring data sets.
+More to come on this! 
+
+## Saving and Importing
+
+Finally, if we want to Import or Save other data, we can do that via the Console.
+
+### The Working Directory
+
+Most of the work we have done this far is data that we do not want to save.
+Most of the work you will do after this workshop, you will want to save.
+
+R works by pointing at a folder or directory on your computer.
+To see where R is pointing now, run the following code
+
+```{R}
+getwd()
+```
+
+Whatever you **do** in your R session will happen here unless you tell it to otherwise.
+If you do not want R pointing in this location in your computer, you need to set your working directory elsewhere.
+To do this, use the ```setwd()``` command.
+This is also a good chance to use RStudio's auto complete feature.
+
+```{r, eval=FALSE}
+setwd()
+```
+Open a double quotation in the function then press TAB.
+This will allow you to navigate your computer.
+Going deeper into your directory structure can be done by just following the auto complete.
+Going higher in the directory requires you to type ```../``` which will allow you to look up a level.
+Set your working directory to the ```output``` directory.
+
+The console should now read that it is pointed to the output directory.
+
+You can write a dataset to your working directory with the ```write_csv()``` command.
+
+```{r,eval=FALSE}
+write.csv(x = AbilineData, file = "MyData.csv")
+```
+
+### Importing Data
+
+Data is imported using the same logic.
+You can use the ```read.csv()``` function to read in a csv file.
+At first, it might be easier to use the Import Dataset function in RStudio (Top right pane).

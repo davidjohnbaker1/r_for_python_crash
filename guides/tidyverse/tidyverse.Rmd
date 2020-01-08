@@ -1,0 +1,201 @@
+---
+title: "tidyverse"
+author: "David John Baker"
+date: "12/23/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Lesson Goals
+
+* Be able to explain tidy data
+* Explain the five tidyverse verbs
+* Perform basic indexing
+* Import and Export data from R 
+
+## tidyverse + tidydata
+
+One of the most important concepts data science and R is the idea of [tidydata](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
+
+The idea behind tidy data is that...
+
+1. Each variable forms a column
+2. Each observation forms a row.
+3. Each type of observation unit forms a table.
+
+If your data is in this format, then you can do almost anything with the tidyverse.
+
+In order to use the tidyverse, you first need to install it.
+```{r}
+# install.packages("tidyverse") # Only need to do this once! 
+library(tidyverse)
+```
+
+## Five Verbs
+
+The five tidyverse verbs come from the dplyr package.
+More information on this package can be found [here](https://dplyr.tidyverse.org/) along with these descriptions.
+
+* ```mutate()``` adds new variables that are functions of existing variables
+* ```select()``` picks variables based on their names.
+* ```filter()``` picks cases based on their values.
+* ```summarise()``` reduces multiple values down to a single summary.
+* ```arrange()``` changes the ordering of the rows.
+
+We can think the verbs as happening in the logical order you would want to grab them.
+Each of the verbs is also going to be connected to one another with the pipe operator.
+The idea behind the pipe or ```%>%`` is that the output of the last line is the first argument of the new function.
+
+For example, if we wanted to make a small table that only had data from El Paso from 2011, then only get the first and fifth columns we would run the following code:
+
+```{r}
+str(txhousing)
+txhousing_only_el_paso <- txhousing[txhousing$city == "El Paso",]
+iris_only_only_el_paso_2005_2011 <- txhousing_only_el_paso[txhousing_only_el_paso$year >= 2011,]
+iris_only_only_el_paso_2005_2011[,c(1,5)]
+```
+Which is a bit verbose.
+
+In order to do this with the tidyverse, you would start with the dataset, the run two verbs over it, connected with the pipe.
+
+```{r}
+library(tidyverse)
+iris_tibble <- as.tibble(iris)
+
+txhousing %>%
+  filter(city == "El Paso") %>%
+  filter(year >= 2011) %>%
+  select(1,5)
+
+```
+
+Both create the same output, but one is much easier to read.
+
+We will now explore a dataset using the five verbs in the dplyr package.
+You use each of the five verbs as you would in English to think about how you want to manipulate your data.
+
+They key to using the tidyverse is the %>% operator (the pipe operator).
+It works by taking output from what is before it and piping it to the next command.
+
+## Economics Data
+
+The dataset here comes from housing sales data in Texas provided by the TAMU real estate centre.
+
+Variable | Description 
+---------|-----------------
+city | Name of MLS area
+year,month,date |Date
+sales | Number of sales
+volume | Total value of sales
+median | Median sale price
+listings | Total active listings
+inventory | "Months inventory" : amount of time it would take to sell all current listings at current pace of sales.
+
+### Select
+
+The select command works by "Selecting" the columns you wish to work with.
+It can either take the index of the column using numbers, or the text.
+There are other options like asking for columns that start or end with certain text.
+
+```{r}
+txhousing %>%
+  select(1,2)
+
+txhousing %>%
+  select(1:3)
+
+txhousing %>%
+  select(city, sales:median)
+
+txhousing %>%
+  select(starts_with("ci"))
+
+txhousing %>%
+  select(-city)
+```
+
+
+### Filter
+
+Once we have the columns we want to work with, we can then pick the rows that are of interest.
+We do this with the filter function.
+Here when asking for matches of character strings, you need to use the ``==``.
+R will remind you if you forget.
+The filter command can be combined with the logical operators. 
+Remember this includes negation operators. 
+
+```{r}
+txhousing %>%
+  filter(city == "El Paso")
+
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio")
+
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) 
+
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) %>%
+  filter(month != 1)
+```
+
+### Mutate
+
+The mutate command will create new variables.
+
+```{r}
+txhousing %>%
+  mutate(zSales = scale(sales))
+
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) %>%
+  filter(month != 1) %>%
+  mutate(zScale = scale(sales))
+```
+
+
+### Arrange
+
+Arrange will sort our data. 
+
+```{r}
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) %>%
+  filter(month != 1) %>%
+  mutate(zScale = scale(sales)) %>%
+  arrange(sales)
+
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) %>%
+  filter(month != 1) %>%
+  mutate(zScale = scale(sales)) %>%
+  arrange(sales, -year)
+
+```
+
+### Group By and Sumemrise 
+
+Often we also want to perform the same type of calculation on a group in our dataset.
+For this we need to group our data, then use the summarize command. 
+We can also use the ``n()`` function to count the number of observations in each group.
+
+```{r}
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) %>%
+  group_by(year) %>%
+  summarise(mean = mean(sales))
+  
+
+txhousing %>%
+  filter(city == "El Paso" | city == "San Antonio") %>%
+  filter(year >= 2004) %>%
+  group_by(year) %>%
+  summarise(mean = mean(sales), n = n())
+```

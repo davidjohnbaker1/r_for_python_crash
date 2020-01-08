@@ -1,0 +1,200 @@
+---
+title: "Modeling"
+author: "David John Baker"
+date: "12/23/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+![](../img/minerva-logo.png)
+
+## Lesson Goals
+
+* Learn how to connect data indexing to ggplot2 
+* Understand layers and geoms in ggplot2
+* Run basic linear regression in R
+* Understand linear regression output 
+
+## Plots and Modeling
+
+Using our data from before, let's now try to make a plot where we predict X from Y.
+First let's make this with ggplot2.
+
+```{r}
+library(tidyverse)
+```
+
+First let's review from this morning and look at the city of Paris (Texas).
+
+```{r}
+txhousing %>%
+  filter(city == "Paris")
+```
+
+Now what are going to plot this.
+Note that we can fuse together what we did before in terms of our tidyverse indexing with that of ggplot2.
+
+The way that this works it that we pipe our data to ggplot then pass what are called aesthetics to the function.
+These are very much like using transparencies with an overhead projector. 
+
+```{r}
+txhousing %>%
+  filter(city == "Paris") %>%
+  ggplot(aes(x = year , y = sales)) + geom_point()
+
+```
+
+Below is how this would look if we did it with its own data set
+
+```{r}
+by_itself <- txhousing %>%
+  filter(city == "Paris")
+
+ggplot(by_itself, aes(x = year , y = sales)) + geom_point()
+
+
+```
+
+Then to use ggplot, we just add geoms and layers one at a time.
+We can look at this on many plots using this [ggplot2 flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html#1)
+
+Below together we will work through how to build this with our Texas housing dataset. 
+
+```{r}
+
+txhousing %>%
+  filter(city == "Paris") %>%
+  ggplot(aes(x = year , y = sales)) + geom_point() + 
+  labs(title = "City of Paris Sales by Year", x = "Year", y = "Sales")
+
+
+txhousing %>%
+  filter(city == "Paris") %>%
+  ggplot(aes(x = year , y = sales)) + geom_point() + 
+  labs(title = "City of Paris Sales by Year", x = "Year", y = "Sales") +
+  theme_classic()
+
+txhousing %>%
+  filter(city == "Paris") %>%
+  ggplot(aes(x = year , y = sales, color = city)) + geom_point() + 
+  labs(title = "City of Paris Sales by Year", x = "Year", y = "Sales") +
+  theme_classic()
+
+txhousing %>%
+#  filter(city == "Paris") %>%
+  ggplot(aes(x = year , y = sales, color = city)) + geom_point() + 
+  labs(title = "City of Paris Sales by Year", x = "Year", y = "Sales") +
+  theme_classic()
+
+txhousing %>%
+  ggplot(aes(x = year, y = listings)) + geom_point() +
+  facet_wrap(~city)
+
+txhousing %>%
+  group_by(city) %>%
+  mutate(zListings = scale(listings)) %>%
+  ungroup(city) %>%
+  ggplot(aes(x = year, y = zListings)) + geom_point() +
+  facet_wrap(~city)
+```
+
+Now let's say that we want to run a t-test to see if there are any differences between sales in counties.
+There are (annoyingly) a few ways to do this with R.
+Generally we still need our data to be in some sort of tidy format.
+
+
+```{r}
+
+elpasoVaustin <- txhousing %>%
+  select(city, sales) %>%
+  filter(city == "El Paso" | city == "Austin")
+```
+
+This has our dataset broken into two columns.
+One is our grouping variable, the other is the values were interested in.
+We can then pass it to the ```t.test``` function with various arguments and get our results.
+
+```{r}
+# Welch's T test
+t.test(elpasoVaustin$sales ~ elpasoVaustin$city )
+
+# Student's T Test
+t.test(elpasoVaustin$sales ~ elpasoVaustin$city, var.equal = TRUE )
+
+# Paired T-test 
+# ( Bad use here! )
+t.test(elpasoVaustin$sales ~ elpasoVaustin$city, paired = TRUE )
+```
+
+Though t-tests are important, linear models are the more common model that most people will be running.
+Linear models model the relationship between one or more variables and another variable.
+I won't go into the the nitty gritty of the assumptions of linear models, as this is not a stats course, but we will go over how to get everything you need.
+
+## Basic Linear Models 
+
+Linear models are done with the ```lm()``` function and follow the general pattern of
+
+> model <- lm(DV ~ IV, data = yourData)
+
+> summary(model)
+
+Models are saved as lists meaning you can access any part of the model with the ```$``` command on the object name.
+Let's try to run some models on our Texas Housing Data.
+
+First, together let's run a model where we try to predict DV from IV.
+Once saving this to an object, we can get the output from ```summary()```.
+Let's try to predict 
+
+```{r}
+options(scipen = 999) # Remove Scientfic notation from R 
+model1 <- lm(sales ~ listings, data = txhousing)
+summary(model1)
+```
+
+
+## Model Interpretation
+
+The call lets us know what we put into R.
+Our coefficients tell us the degree to which one variable effects another.
+The estimates are our intercept and beta-coefficient (non-standardized!).
+For everyone one unit increase in our IV (listings) we can expect a .179 rise in our DV (sales) in whatever unit they are!
+Your test statistics are to the right of that.
+Standard errors are calculated on your estimate (how much error there is on either side)
+You t-value is you test statistic.
+Your p value is the probability of getting a non-zero value given the null hypothesis that there is no effect.
+Degrees of freedom are listed below.
+Your multiple-R squared tells you how much variance you explain.
+
+We can then add more variables to try to improve our prediction.
+For example, what happens when we add in the year as a variable?
+
+```{r}
+model2 <- lm(sales ~ listings + year, data = txhousing)
+summary(model2)
+plot(model2)
+```
+
+Here we also find a significant effect of year and listing on sales.
+Our model fit improves a very small amount, yet the difference is significant.
+This *significance* should be interpreted with caution as we have a lot of data and the more data you have, the more likely a result is to come up as p <.01.
+
+We also can get information from the model with the ```plot()``` function.
+Here we can get into the nitty gritty like checking if our residuals are normally distributed. 
+
+We can also test the degree that one model is better than another with the ```anova()``` function.
+
+```{r}
+anova(model1, model2)
+```
+
+## Own Analyses
+
+For the rest of the class, I want everyone to try their own plotting and regression models.
+Use your own data, use data provided by R. 
+
+## Future
+
+In the future, check out Hadely Wickham's [R For Data Science](https://r4ds.had.co.nz/) which will give you a solid introduction to R and all it can do.
+Much of your time will also be spent on Stack Overflow.
+I also very much suggest setting up a Facebook group or something of people here that are about on the same skill level so that you can help each other out.
