@@ -3,8 +3,8 @@ title: "Why R?"
 author: "David John Baker"
 date: "02/23/2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ## Lesson Goals
@@ -39,7 +39,7 @@ Obviously if you are coming to a weekend class, you do not need that much convin
 You can download R for your computer by going to [CRAN](https://cran.r-project.org/) and selecting the appropriate ```Download and Install R``` links.
 Make sure to install R first before installing RStudio.
 
-![CRAN Homepage](../img/cran1.png)
+![CRAN Homepage](../../img/cran1.png)
 
 ### RStudio 
 
@@ -47,7 +47,7 @@ Make sure to install R first before installing RStudio.
 RStudio is basically your workbench where you can access everything you need for managing your scripts, data, and project structure.
 By using RStudio, you also can use a host of other features ranging from Markdown documents (like this one!), interactive data dashboards like [Shiny](https://www.rstudio.com/products/shiny/), and the [tidyverse](https://www.rstudio.com/products/rpackages/).
 
-![RStudio](../img/rstudio1.png)
+![RStudio](../../img/rstudio1.png)
 
 ### Packages and the tidyverse
 
@@ -82,7 +82,7 @@ The top right has your Environment, History, and version control commands.
 The bottom right has your Viewer, Library for your packages, and a system to navigate your files.
 The top left will be where you write your code. 
 
-![RStudio Environment](../img/rstudio2.png)
+![RStudio Environment](../../img/rstudio2.png)
 
 ### Environment
 
