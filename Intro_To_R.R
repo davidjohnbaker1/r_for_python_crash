@@ -9,6 +9,7 @@ library(tidyverse)
 library(nycflights13)
 
 diamonds
+
 flights
 
 ## R As Calculator 
@@ -20,6 +21,14 @@ flights
 # Dplyr Verbs 
 
 ## Filter
+
+flights
+
+## First day of year? 
+
+## wrapping in parenthsis 
+
+## the %in%
 
 ## Select 
 
