@@ -1,35 +1,86 @@
-# Introduction to R 
+#------------------------------------------------------------
+# R Workshop 
+# install.packages("tidvyerse")
+# install.packages("nycflights13")
+#------------------------------------------------------------
+# The RStudio IDE 
 
-#install.packages("tidvyerse")
-## install.packages("nycflights13")
+
+#------------------------------------------------------------
+# Import Libraries 
 
 
-# Read In CVS 
 
+#------------------------------------------------------------
+# Differences with Python (masking, modules)
+
+
+#------------------------------------------------------------
+# Read in Data with readr
+
+
+#------------------------------------------------------------
 # Tibbles 
 
+#------------------------------------------------------------
 # Viewing Data 
 
-# Dplyr Verbs 
+
+
+#------------------------------------------------------------
+# dplyr Verbs (data, arguments, others)
+
+## Select 
+
+## colon, ends_with, starts_with
 
 ## Filter
 
+## %in% operator 
 
-## First day of year? 
-
-## wrapping in parenthsis 
-
-## the %in%
-
-## Select 
-  
 ## Mutate
+
+## Transmutate 
 
 ## Arrange
 
-## Summerise 
+### desc() 
 
 ## Group By 
 
+## Summerise 
+
 ## Pipe 
+
+#-------------------------------------------------------------
+# ggplot2
+
+## Scatter Plots 
+
+## Bar Plots (identity, position, summary)
+
+## Facet Wrapping
+
+## aesthetics
+
+## Controling fill, color 
+
+## Themes 
+
+## labs 
+
+#-------------------------------------------------------------
+# Running Linear Models in R 
+
+
+
+
+
+
+
+
+
+
+
+
 

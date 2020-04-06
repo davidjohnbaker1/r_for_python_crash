@@ -3,8 +3,8 @@ title: "tidyverse"
 author: "David John Baker"
 date: "12/23/2018"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ## Lesson Goals
