@@ -60,10 +60,10 @@ Many materials are drawn from previous workshop materials that can be found [her
 
 ## Resources
 
+* [R for Python Programmers](http://tidynomicon.tech/)
 * [R for Data Science](https://r4ds.had.co.nz/)
 * [Practical Programming with R](https://rstudio-education.github.io/hopr/)
 * [Tidy Text with R](https://www.tidytextmining.com/)
 * [Deep Learning with R]()
 * [Advanced R](http://adv-r.had.co.nz/)
 * [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) | For Datasets 10-100 Gigs 
-* [] 
