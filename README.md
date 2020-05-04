@@ -1,5 +1,10 @@
 # R For Python Short Course
 
+## TODO
+
+* [ ] Spell Check
+* [ ] Add Links 
+* [ ] Reorg Organisation 
 
 This repository contains five one hour long lessons for data scientists whose typical workflow consists of working with Python and would like to know what R has to offer. 
 
@@ -18,7 +23,7 @@ Materials for these lessons are based off of  [R for Data Science](https://r4ds.
 
 ## Lessons
 
-* Lesson 0: [Intalling R, RStudio, and the tidyverse](#lesson0) 
+* Lesson 0: [Installing R, RStudio, and the tidyverse](#lesson0) 
 * Lesson 1: [ggplot2](#ggplot2)
 * Lesson 2: [dplyr](#dplyr)
 * Lesson 3: [Python, R, and RStudio Intergration](#cohabitation)
@@ -35,7 +40,6 @@ By the end of the this lesson, students should be able to:
 * [ ] Run a command in RStudio's text editor with a keyboard shortcut
 * [ ] Be able to change the colors of their RStudio ID
 * [ ] Explain how R's vectorization of code with base R differs from that of Python 
-
 
 ### ggplot2 {#ggplot2}
 
