@@ -71,7 +71,6 @@ By the end of this lesson, students should be able to
 * [ ] Use the `summarise()` function to extract summary statistics like mean, median, and counts on groups
 * [ ] Use the `arrange()` function to rearrange their dataset by different variables 
 
-
 * Theory of [Tidy Data](https://vita.had.co.nz/papers/tidy-data.pdf)	
 * [R for Data Science](https://r4ds.had.co.nz/)
 

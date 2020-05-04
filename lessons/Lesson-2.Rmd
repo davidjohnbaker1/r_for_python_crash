@@ -1,0 +1,108 @@
+---
+author: "David John Baker"
+date: "04/05/2020"
+output: html_document
+---
+
+Let's now continue to explore the tidyverse with the `dplyr` package.
+Here we'll learn about five verbs and the pipe operator.
+
+```{r}
+library(dplyr) # for manipulating data
+
+library(readr) # for getting data
+library(ggplot2) # for plotting data
+
+tips <- read_csv("tips.csv")
+
+# You can change where this is output above in "Settings (by knit) > Chunk Output in Console"
+tips
+
+```
+
+The first verb we will use is `select()` which lets us choose colunmns. 
+
+```{r}
+select(tips, total_bill, tip)
+
+select(tips, -X1)
+
+select(tip:size)
+
+select(tips, starts_with("s"))
+```
+
+Now let's check out filter!
+
+```{r}
+
+filter(tips, day == "Sun")
+
+filter(tips, tip > 5)
+
+filter(tips, sex == "Male" & smoker == "Yes")
+
+filter(tips, sex == "Male" | smoker == "Yes")
+
+```
+
+Let's now return to our example from before to see `mutate()` in action. 
+It's the same output, but right now looks a bit different since it's simplified.
+
+```{r}
+mutate(tips, gbp_total = total_bill * 0.81)
+
+# R doesn't care about spacing!! 
+mutate(tips, 
+       gbp_total = total_bill * 0.81,
+       gbp_tip = tip * 0.81)
+
+```
+
+Up until this point, we have been doing some very basic commands.
+What if we want to get super fancy?
+We could save a bunch of intermediate objects into memory... or we could use the %>% operator! 
+
+```{r}
+select(tips, total_bill)
+
+tips %>%  # and then! 
+  select(total_bill)
+
+```
+
+We can then build up more complex commands.
+
+```{r}
+tips %>%
+  select(total_bill, tip, sex, smoker) %>%
+  filter(sex == "Male" & smoker == "Yes") %>%
+  mutate(gbp_total_bill = total_bill * 0.81,
+         gbp_tip = tip * 0.81)
+
+```
+
+But what if we wanted to investigate differences between smoker and non smokers for tipping?
+For that we need group_by and summerise! 
+
+```{r}
+tips %>%
+  group_by(smoker)
+
+tips %>%
+  group_by(smoker) %>%
+  summarise(mean = mean(tip),
+            count = n())
+
+```
+
+Lastly let's arrange our output here so that those who tip more are on top! 
+
+```{r}
+tips %>%
+  group_by(smoker) %>%
+  summarise(mean = mean(tip),
+            count = n()) %>%
+  arrange(desc(mean))
+```
+
