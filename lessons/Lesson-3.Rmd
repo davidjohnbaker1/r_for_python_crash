@@ -1,0 +1,52 @@
+---
+title: "RStudio for Data Science"
+author: "David John Baker"
+date: "06/04/2020"
+output: html_document
+---
+
+
+* Shiny 
+* Markdown 
+  - HTML
+  - Word
+  - LaTeX
+* Terminal 
+
+
+## Python 
+
+```{r}
+library(reticulate)
+library(tidyverse)
+
+converted_tips_tidyverse <- read_csv("tips.csv")
+```
+
+
+```{python}
+import pandas as pd
+converted_tips_pandas = pd.read_csv("converted_tips.csv")
+```
+
+
+```{r}
+converted_tips_tidyverse
+
+converted_tips_tidyverse %>% 
+  select(day)
+```
+
+```{python}
+converted_tips_pandas
+
+converted_tips_pandas["day"]
+
+converted_tips_pandas["aus_sum"] = converted_tips_pandas["aus_tips"] + converted_tips_pandas["aus_total"]
+
+converted_tips_pandas["aus_sum"]
+
+```
+
+
+
