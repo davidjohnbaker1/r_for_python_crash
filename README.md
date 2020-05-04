@@ -54,7 +54,6 @@ By the end of this lesson, students should be able to:
 * [ ] Build a barchart with existing data
 * [ ] Fill a barchart with existing data
 * [ ] Change a barchart's appearance with the `position = ` argument
-* [ ] Identify what form data needs to be in to use `stat = "identity"`
 * [ ] Change the title, x, and y axis of a plot 
 * [ ] Add a theme to a ggplot
 
