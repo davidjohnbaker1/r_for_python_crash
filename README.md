@@ -18,12 +18,12 @@ Materials for these lessons are based off of  [R for Data Science](https://r4ds.
 
 ## Lessons
 
-* Lesson 0: [Intalling R, RStudio, and the tidyverse](### Intalling R, RStudio, and the tidyverse) 
+* Lesson 0: [Intalling R, RStudio, and the tidyverse](#lesson0) 
 * Lesson 1: [ggplot2](#ggplot2)
 * Lesson 2: [dplyr](#dplyr)
 * Lesson 3: [Python, R, and RStudio Intergration](#cohabitation)
 
-### Intalling R, RStudio, and the tidyverse
+### Intalling R, RStudio, and the tidyverse (#lesson0)
 
 By the end of the this lesson, students should be able to:
 
