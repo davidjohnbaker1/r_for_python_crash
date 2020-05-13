@@ -2,9 +2,10 @@
 title: "RStudio for Data Science"
 author: "David John Baker"
 date: "06/04/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
-
 
 * Shiny 
 * Markdown 
@@ -12,7 +13,6 @@ output: html_document
   - Word
   - LaTeX
 * Terminal 
-
 
 ## Python 
 

@@ -1,7 +1,9 @@
 ---
 author: "David John Baker"
 date: "04/05/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 Let's now continue to explore the tidyverse with the `dplyr` package.
@@ -23,11 +25,11 @@ tips
 The first verb we will use is `select()` which lets us choose colunmns. 
 
 ```{r}
-select(tips, total_bill, tip)
+select(tips, total_bill)
 
 select(tips, -X1)
 
-select(tip:size)
+select(tips, tip:size)
 
 select(tips, starts_with("s"))
 ```
